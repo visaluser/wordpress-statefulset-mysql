@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cafe-ingress
+  annotations:
+    #kubernetes.io/ingress.class: albii
+    kubernetes.io/spec.ingressClassName: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[ {"HTTP": 80}]'
+    alb.ingress.kubernetes.io/target-type: ip
+    lb.ingress.kubernetes.io/subnets: subnet-02e60458234827abc,subnet-04c3ec8499f420675
+spec:
+  ingressClassName: alb
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+              name : wordpress-service
+              port:
+                number: 80
